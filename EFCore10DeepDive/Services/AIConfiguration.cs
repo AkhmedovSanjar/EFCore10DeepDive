@@ -36,13 +36,7 @@ public static class AIConfiguration
     /// </summary>
     public static string? GetGeminiApiKey()
     {
-        // Option 1: Hard-coded API key (for development only)
-        var hardcodedKey = "AIzaSyDI6vgn0oypP9_iqNSq0SSZ57s9KL4CWhs";
-        if (!string.IsNullOrEmpty(hardcodedKey))
-            return hardcodedKey;
-
-        // Option 2: Environment variable (recommended for production)
-        var envKey = Environment.GetEnvironmentVariable("GEMINI_API_KEY");
+        var envKey = Environment.GetEnvironmentVariable("GEMINI_API_KEY") ?? "";
         if (!string.IsNullOrEmpty(envKey))
             return envKey;
 

@@ -2,4 +2,5 @@
   <Project Path="EFCore10DeepDive/EFCore10DeepDive.csproj" />
   <Project Path="JSONTypeBench/JSONTypeBench.csproj" />
   <Project Path="ParameterizedCollectionsBench/ParameterizedCollectionsBench.csproj" />
+  <Project Path="VectorSearchBench/VectorSearchBench.csproj" Id="bdf69b32-1ed4-4150-a995-b76df89290a5" />
 </Solution>
