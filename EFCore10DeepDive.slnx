@@ -1,5 +1,5 @@
 <Solution>
-  <Project Path="../JSONTypeBench/JSONTypeBench.csproj" Id="2eafa59e-e621-424a-b9f6-b95ab8b694f9" />
-  <Project Path="../ParameterizedCollectionsBench/ParameterizedCollectionsBench.csproj" Id="817b84b9-f445-4426-8347-4d427b0449c0" />
-  <Project Path="EFCore10DeepDive.csproj" />
+  <Project Path="EFCore10DeepDive/EFCore10DeepDive.csproj" />
+  <Project Path="JSONTypeBench/JSONTypeBench.csproj" />
+  <Project Path="ParameterizedCollectionsBench/ParameterizedCollectionsBench.csproj" />
 </Solution>
