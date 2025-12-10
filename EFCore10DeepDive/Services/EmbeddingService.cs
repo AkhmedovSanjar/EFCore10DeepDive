@@ -1,60 +1,35 @@
 using Microsoft.Data.SqlTypes;
-using OpenAI.Embeddings;
 
 namespace EFCore10DeepDive.Services;
 
 /// <summary>
-/// Embedding generation service
+/// Embedding generation service using Google Gemini API if configured, otherwise falls back to demo provider
+/// Implements Strategy pattern for different embedding providers
 /// </summary>
 public class EmbeddingService
 {
-    private readonly EmbeddingClient? _embeddingGenerator;
-    public EmbeddingService() => _embeddingGenerator = AIConfiguration.CreateEmbeddingGenerator();
+    private readonly IEmbeddingProvider _provider;
+    public EmbeddingService() => _provider = CreateProvider();
 
     /// <summary>
     /// Generate vector embedding from text
     /// </summary>
-    public SqlVector<float> GenerateEmbedding(string text)
+    public async Task<SqlVector<float>> GenerateEmbeddingAsync(string text)
     {
-        if (_embeddingGenerator != null)
-        {
-            try
-            {
-                var embeddingRes = _embeddingGenerator.GenerateEmbedding(text);
-                var embedding = embeddingRes.Value.ToFloats();
-                if (embedding.Length > 0)
-                    return new SqlVector<float>(embedding);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"[AI Warning] Failed to generate AI embedding: {ex.Message}");
-            }
-        }
-
-        return GenerateDemoEmbedding(text);
-    }
-
-    /// <summary>
-    /// Demo embedding generation
-    /// </summary>
-    private SqlVector<float> GenerateDemoEmbedding(string text)
-    {
-        const int VectorDimensions = 1536;
-        var random = new Random(text.GetHashCode());
-
-        var vector = new float[VectorDimensions];
-        for (int i = 0; i < VectorDimensions; i++)
-            vector[i] = (float)(random.NextDouble() * 2 - 1);
-
-        var magnitude = Math.Sqrt(vector.Sum(x => x * x));
-        for (int i = 0; i < VectorDimensions; i++)
-            vector[i] /= (float)magnitude;
-
-        return new SqlVector<float>(vector);
+        ArgumentException.ThrowIfNullOrWhiteSpace(text, nameof(text));
+        return await _provider.GenerateAsync(text);
     }
 
     /// <summary>
     /// Check if real AI is configured and available
     /// </summary>
-    public bool IsAIAvailable => _embeddingGenerator != null;
+    public bool IsAIAvailable => _provider.IsAvailable;
+
+    private static IEmbeddingProvider CreateProvider()
+    {
+        var apiKey = AIConfiguration.GetGeminiApiKey();
+        return string.IsNullOrEmpty(apiKey)
+            ? new DemoEmbeddingProvider()
+            : new GeminiEmbeddingProvider(apiKey);
+    }
 }

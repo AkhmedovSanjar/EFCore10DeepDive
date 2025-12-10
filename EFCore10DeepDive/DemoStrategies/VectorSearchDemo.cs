@@ -81,21 +81,10 @@ public class VectorSearchDemo : DemoBase
 
         // Generate query embedding
         var searchText = "gaming equipment with RGB lights";
-        SqlVector<float> queryVector = _embeddingService.GenerateEmbedding(searchText);
+        SqlVector<float> queryVector = await _embeddingService.GenerateEmbeddingAsync(searchText);
 
         Console.WriteLine();
 
-        // Perform vector similarity search using GetTopProductsAsync
-        var similarProducts = await GetTopProductsAsync(context, queryVector, "cosine", 3);
-
-        Console.WriteLine("    Top 3 Similar Products (Cosine Similarity):");
-        foreach (var product in similarProducts)
-        {
-            var similarityScore = 1 - product.Distance;
-            Console.WriteLine($"    {similarityScore:P1} - {product.Name} ({product.Category})");
-        }
-
-        Console.WriteLine("\nDistance Metrics Comparison:");
         Console.WriteLine("    1. Cosine Similarity (angle between vectors, best for text)");
         var cosineResults = await GetTopProductsAsync(context, queryVector, "cosine", 3);
         DisplayResults(cosineResults);
@@ -103,22 +92,6 @@ public class VectorSearchDemo : DemoBase
         Console.WriteLine("\n    2. Euclidean Distance (straight-line distance)");
         var euclideanResults = await GetTopProductsAsync(context, queryVector, "euclidean", 3);
         DisplayResults(euclideanResults);
-
-        Console.WriteLine("\n    3. Dot Product (unnormalized similarity)");
-        var dotResults = await context.Products
-            .OrderByDescending(p => EF.Functions.VectorDistance("dot", p.SearchVector, queryVector))
-            .Take(3)
-            .Select(p => new
-            {
-                p.Name,
-                Score = EF.Functions.VectorDistance("dot", p.SearchVector, queryVector)
-            })
-            .ToListAsync();
-
-        foreach (var product in dotResults)
-        {
-            Console.WriteLine($"       {product.Score:F4} - {product.Name}");
-        }
     }
 
     private async Task<List<(string Name, string Category, string Description, double Distance)>> GetTopProductsAsync(
@@ -146,8 +119,8 @@ public class VectorSearchDemo : DemoBase
     {
         foreach (var result in results)
         {
-            Console.WriteLine($"       {result.Distance:F4} - {result.Name} - {result.Category}");
-            Console.WriteLine($"       {result.Description}");
+            Console.WriteLine($"\t{result.Distance:F4} - {result.Name} - {result.Category}");
+            Console.WriteLine($"\t\t{result.Description}");
         }
     }
 }

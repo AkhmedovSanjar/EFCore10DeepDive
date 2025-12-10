@@ -34,7 +34,7 @@ public class VectorGenerationInterceptor : SaveChangesInterceptor
             if (product.SearchVector.IsNull || product.SearchVector.Length == 0)
             {
                 var textToEmbed = $"{product.Name} {product.Description} {product.Category}";
-                product.SearchVector = _embeddingService.GenerateEmbedding(textToEmbed);
+                product.SearchVector = await _embeddingService.GenerateEmbeddingAsync(textToEmbed);
             }
         }
 
