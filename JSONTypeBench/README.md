@@ -1,6 +1,6 @@
 # Complex Type Storage Benchmark
 
-## ?? What This Benchmarks
+## What This Benchmarks
 
 Compares query performance between two storage strategies for complex types:
 1. **Column Storage** - ShippingAddress stored as individual columns (`ShippingAddress_City`, `ShippingAddress_Street`, etc.)
@@ -8,14 +8,14 @@ Compares query performance between two storage strategies for complex types:
 
 Both benchmarks use the **same WHERE clause**: `WHERE City == "Seattle"`
 
-## ?? Benchmark Details
+## Benchmark Details
 
 - **Dataset**: 10,000 customers
 - **Query**: Filter by city name (`City == "Seattle"`), return 100 results
 - **Column Storage**: Direct column access (`ShippingAddress_City`)
 - **JSON Storage**: Uses `JSON_VALUE()` function to extract city from JSON
 
-## ?? What We're Testing
+## What We're Testing
 
 ```csharp
 // SAME WHERE CLAUSE for both:
@@ -34,7 +34,7 @@ context.Customers
     .ToListAsync();
 ```
 
-## ?? Running the Benchmark
+## Running the Benchmark
 
 ```bash
 cd JSONTypeBench
@@ -43,7 +43,7 @@ dotnet run -c Release
 
 **Important:** Must run in Release mode (`-c Release`) for accurate results!
 
-## ?? Expected Results
+## Expected Results
 
 ### Without Indexes (Raw Performance)
 
@@ -53,12 +53,12 @@ dotnet run -c Release
 | Complex Type (JSON): Query BillingAddress      | ~25 ms   | ~50 KB    |
 
 **Column Storage is ~40-60% faster** because:
-- ? Direct column access (no parsing)
-- ? No JSON extraction overhead
-- ? Can use standard B-tree indexes
-- ? Query optimizer has better statistics
+- Direct column access (no parsing)
+- No JSON extraction overhead
+- Can use standard B-tree indexes
+- Query optimizer has better statistics
 
-## ?? SQL Generated
+## SQL Generated
 
 ### Complex Type as Columns
 ```sql
@@ -79,25 +79,25 @@ FROM [Customers] AS [c]
 WHERE JSON_VALUE([c].[BillingAddress], '$.City') = N'Seattle'
 ```
 
-## ?? Performance Comparison
+## Performance Comparison
 
 ### Column Storage (ShippingAddress)
-- ? **Faster queries** - Direct column access
-- ? **Better for WHERE clauses** - No parsing overhead
-- ? **Easier to index** - Standard column indexes
-- ? **Query optimizer friendly** - Better statistics
-- ? **More columns** - Wider table schema
-- ? **Less flexible** - Schema changes require migrations
+- **Faster queries** - Direct column access
+- **Better for WHERE clauses** - No parsing overhead
+- **Easier to index** - Standard column indexes
+- **Query optimizer friendly** - Better statistics
+- **More columns** - Wider table schema
+- **Less flexible** - Schema changes require migrations
 
 ### JSON Storage (BillingAddress)
-- ? **Flexible schema** - Easy to add properties
-- ? **Compact storage** - 50% less space (SQL Server 2025)
-- ? **Good for collections** - Order histories, preferences
-- ? **Atomic updates** - Update entire object at once
-- ? **Slower queries** - JSON parsing overhead
-- ? **Limited indexing** - Requires computed columns
+- **Flexible schema** - Easy to add properties
+- **Compact storage** - 50% less space (SQL Server 2025)
+- **Good for collections** - Order histories, preferences
+- **Atomic updates** - Update entire object at once
+- **Slower queries** - JSON parsing overhead
+- **Limited indexing** - Requires computed columns
 
-## ?? When to Use Each
+## When to Use Each
 
 ### Use Column Storage When:
 - Properties are **frequently queried** in WHERE clauses
@@ -125,7 +125,7 @@ WHERE JSON_VALUE([c].[BillingAddress], '$.City') = N'Seattle'
 - Metadata/tags
 - Dynamic attributes
 
-## ?? Optimization Tips
+## Optimization Tips
 
 ### For Column Storage
 ```csharp
@@ -145,30 +145,30 @@ context.Database.ExecuteSqlRaw(@"
 ");
 ```
 
-## ?? Best Practice: Use Both Together
+## Best Practice: Use Both Together
 
 ```csharp
 public class Customer
 {
     // Column Storage - for frequently queried properties
-    public Address ShippingAddress { get; set; }  // ? Columns
+    public Address ShippingAddress { get; set; }  // Columns
     
     // JSON Storage - for flexible/less queried data
-    public Address BillingAddress { get; set; }   // ? JSON
-    public List<OrderHistory> OrderHistories { get; set; }  // ? JSON Array
-    public CustomerPreferences Preferences { get; set; }    // ? JSON
+    public Address BillingAddress { get; set; }   // JSON
+    public List<OrderHistory> OrderHistories { get; set; }  // JSON Array
+    public CustomerPreferences Preferences { get; set; }    // JSON
 }
 ```
 
-## ?? Key Takeaways
+## Key Takeaways
 
-1. ? **Column Storage is 40-60% faster** for individual property queries
-2. ? **JSON is more flexible** for evolving schemas
-3. ? **Both can be indexed** - JSON requires computed columns
-4. ? **SQL Server 2025** JSON improvements narrow the gap
-5. ? **Use both together** - Columns for hot paths, JSON for flexibility
+1. **Column Storage is 40-60% faster** for individual property queries
+2. **JSON is more flexible** for evolving schemas
+3. **Both can be indexed** - JSON requires computed columns
+4. **SQL Server 2025** JSON improvements narrow the gap
+5. **Use both together** - Columns for hot paths, JSON for flexibility
 
-## ?? Related
+## Related
 
 - [EF Core Complex Types Docs](https://learn.microsoft.com/en-us/ef/core/modeling/complex-types)
 - [SQL Server JSON Support](https://learn.microsoft.com/en-us/sql/relational-databases/json/json-data-sql-server)

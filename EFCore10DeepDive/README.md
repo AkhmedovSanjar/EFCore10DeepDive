@@ -2,9 +2,9 @@
 
 EF Core 10 introduces transformative features for modern data modeling, AI integration, and performance. This project demonstrates **ONLY** the new features introduced in EF Core 10, with **separate models for each feature** to clearly show their purpose and differences.
 
-## ?? NEW Features Demonstrated
+## NEW Features Demonstrated
 
-### 1. **Complex Types—Table Splitting vs JSON** ? ENHANCED
+### 1. **Complex Types - Table Splitting vs JSON** - ENHANCED
 **Model**: `Customer` with `Address`, `OrderHistory`, `CustomerPreferences`
 - **Table Splitting**: `ShippingAddress` stored as columns (fast reads, indexable)
 - **JSON Storage**: `BillingAddress`, `OrderHistories`, `Preferences` stored as JSON
@@ -12,7 +12,7 @@ EF Core 10 introduces transformative features for modern data modeling, AI integ
 - Struct support for value semantics
 - **Pattern**: Value object pattern, Flexible schema
 
-### 2. **ExecuteUpdateAsync—Bulk Operations** ? NEW
+### 2. **ExecuteUpdateAsync - Bulk Operations** - NEW
 **Model**: `Order` for demonstrating bulk updates
 - Bulk update without loading entities into memory
 - 100x performance improvement
@@ -20,7 +20,7 @@ EF Core 10 introduces transformative features for modern data modeling, AI integ
 - Conditional updates on multiple properties
 - **Pattern**: High-performance bulk operations
 
-### 3. **Vector Search for AI Integration** ? NEW
+### 3. **Vector Search for AI Integration** - NEW
 **Model**: `Product` with `SearchVector` (vector embeddings)
 - SQL Server 2025 `vector(1536)` data type
 - `EF.Functions.VectorDistance()` for similarity search
@@ -28,7 +28,7 @@ EF Core 10 introduces transformative features for modern data modeling, AI integ
 - Distance metrics: cosine, euclidean, dot product
 - **Pattern**: AI/Semantic search, RAG scenarios
 
-### 4. **Named Query Filters & Soft Delete** ? NEW
+### 4. **Named Query Filters & Soft Delete** - NEW
 **Model**: `Account` with multi-tenant and soft delete flags
 - Multiple named filters per entity
 - Selective disabling: `IgnoreQueryFilters(["SoftDelete"])`
@@ -36,7 +36,7 @@ EF Core 10 introduces transformative features for modern data modeling, AI integ
 - Tenant context managed via `TenantService`
 - **Pattern**: Multi-tenancy, Soft Delete, Specification pattern
 
-### 5. **LeftJoin/RightJoin Syntax** ? NEW (.NET 10)
+### 5. **LeftJoin/RightJoin Syntax** - NEW (.NET 10)
 **Model**: `Student`, `Department`, and `Enrollment`
 - First-class LINQ `LeftJoin()` and `RightJoin()`
 - Replaces `GroupJoin+SelectMany+DefaultIfEmpty`
@@ -44,45 +44,45 @@ EF Core 10 introduces transformative features for modern data modeling, AI integ
 - **Pattern**: Query simplification
 
 ### Additional Features:
-- **Improved Parameterized Collections** ? NEW - Uses `Order` model, intelligent padding, plan cache optimization
-- **Split Query Ordering Consistency** ? NEW - Uses `Student`/`Enrollment` model, automatic deterministic ordering
+- **Improved Parameterized Collections** - NEW - Uses `Order` model, intelligent padding, plan cache optimization
+- **Split Query Ordering Consistency** - NEW - Uses `Student`/`Enrollment` model, automatic deterministic ordering
 
-## ??? Architecture - Feature Isolation
+## Architecture - Feature Isolation
 
 ```
 EFCore10DeepDive/
-??? Models/                          # Each model demonstrates ONE feature
-?   ??? Customer.cs                  # Complex Types (Table Splitting + JSON)
-?   ?   ??? Address                  # Used for both: columns and JSON
-?   ?   ??? OrderHistory             # Complex type collection as JSON
-?   ?   ??? CustomerPreferences      # Struct complex type as JSON
-?   ??? Order.cs                     # ExecuteUpdateAsync + Parameterized Collections
-?   ??? Product.cs                   # Vector Search
-?   ?   ??? SearchVector             # vector(1536) for embeddings
-?   ??? Account.cs                   # Named Query Filters
-?   ?   ??? IsDeleted                # Soft delete filter
-?   ?   ??? TenantId                 # Multi-tenant filter
-?   ??? Student.cs                   # LeftJoin/RightJoin + SplitQuery
-?       ??? Department               # For join demonstrations
-?       ??? Enrollment               # For split query with multiple includes
-??? Data/
-?   ??? AppDbContext.cs              # Feature-specific configurations
-??? DemoStrategies/                  # One demo per feature
-?   ??? ComplexTypesDemo.cs          # Customer - Table Split vs JSON comparison
-?   ??? ExecuteUpdateJsonDemo.cs     # Order + Bulk operations
-?   ??? VectorSearchDemo.cs          # Product + AI search
-?   ??? NamedQueryFiltersDemo.cs     # Account + Multi-tenant
-?   ??? LeftJoinDemo.cs              # Student/Department joins
-?   ??? ParameterizedCollectionsDemo.cs  # Order + Query optimization
-?   ??? SplitQueryConsistencyDemo.cs     # Student/Enrollment + Ordering
-??? Services/
-    ??? QueryCounterInterceptor.cs   # SQL tracking
-    ??? DemoRunner.cs                # Facade pattern
-    ??? TenantService.cs             # Multi-tenant context provider
+|- Models/                          # Each model demonstrates ONE feature
+|   |- Customer.cs                  # Complex Types (Table Splitting + JSON)
+|   |   |- Address                  # Used for both: columns and JSON
+|   |   |- OrderHistory             # Complex type collection as JSON
+|   |   |- CustomerPreferences      # Struct complex type as JSON
+|   |- Order.cs                     # ExecuteUpdateAsync + Parameterized Collections
+|   |- Product.cs                   # Vector Search
+|   |   |- SearchVector             # vector(1536) for embeddings
+|   |- Account.cs                   # Named Query Filters
+|   |   |- IsDeleted                # Soft delete filter
+|   |   |- TenantId                 # Multi-tenant filter
+|   |- Student.cs                   # LeftJoin/RightJoin + SplitQuery
+|       |- Department               # For join demonstrations
+|       |- Enrollment               # For split query with multiple includes
+|- Data/
+|   |- AppDbContext.cs              # Feature-specific configurations
+|- DemoStrategies/                  # One demo per feature
+|   |- ComplexTypesDemo.cs          # Customer - Table Split vs JSON comparison
+|   |- ExecuteUpdateJsonDemo.cs     # Order + Bulk operations
+|   |- VectorSearchDemo.cs          # Product + AI search
+|   |- NamedQueryFiltersDemo.cs     # Account + Multi-tenant
+|   |- LeftJoinDemo.cs              # Student/Department joins
+|   |- ParameterizedCollectionsDemo.cs  # Order + Query optimization
+|   |- SplitQueryConsistencyDemo.cs     # Student/Enrollment + Ordering
+|- Services/
+    |- QueryCounterInterceptor.cs   # SQL tracking
+    |- DemoRunner.cs                # Facade pattern
+    |- TenantService.cs             # Multi-tenant context provider
 
 ```
 
-## ?? Model-to-Feature Mapping
+## Model-to-Feature Mapping
 
 | Model | Primary Feature | Key Properties | Benefits |
 |-------|----------------|----------------|----------|
@@ -92,7 +92,7 @@ EFCore10DeepDive/
 | **Account** | Named Query Filters | `IsDeleted`, `TenantId` | Multi-tenant, Soft delete |
 | **Student/Department/Enrollment** | LeftJoin/RightJoin + SplitQuery | Navigation properties | 80% less code, deterministic ordering |
 
-## ?? Quick Start
+## Quick Start
 
 ### Prerequisites
 - .NET 10 SDK
@@ -108,7 +108,7 @@ dotnet run
 ### Menu Options
 Select from menu to run specific feature demo. Each demo uses its dedicated model.
 
-## ?? Key Benefits Summary
+## Key Benefits Summary
 
 | Feature | Model Used | Performance | Code Quality | SQL Server |
 |---------|-----------|-------------|--------------|------------|
@@ -119,7 +119,7 @@ Select from menu to run specific feature demo. Each demo uses its dedicated mode
 | Named Filters | Account | - | Multi-tenant | All |
 | LeftJoin/RightJoin | Student/Dept | - | 80% less code | All |
 
-## ?? Code Examples by Model
+## Code Examples by Model
 
 ### Customer - Complex Types (Table Splitting vs JSON)
 ```csharp
@@ -139,9 +139,9 @@ public class Customer
 }
 
 // Configuration - Showing the difference
-entity.ComplexProperty(c => c.ShippingAddress);  // ? Table splitting (columns)
+entity.ComplexProperty(c => c.ShippingAddress);  // Table splitting (columns)
 
-entity.ComplexProperty(c => c.BillingAddress, b => b.ToJson());  // ? JSON storage
+entity.ComplexProperty(c => c.BillingAddress, b => b.ToJson());  // JSON storage
 
 // Queries
 // Table Splitting: WHERE [ShippingAddress_City] = 'Seattle'
@@ -202,20 +202,20 @@ var oldQuery = context.Students
     .SelectMany(x => x.d.DefaultIfEmpty(), (x, dept) => new { x.s, dept });
 ```
 
-## ?? SQL Server Compatibility
+## SQL Server Compatibility
 
 | Feature | Model | SQL Server 2025 | SQL Server 2019-2022 |
 |---------|-------|----------------|---------------------|
-| Vector Search | Product | ? Required | ? |
-| JSON Type (native) | Customer | ? Required (level 170) | Uses `nvarchar(max)` fallback |
-| Complex Types | Customer | ? | ? |
-| ExecuteUpdate | Order | ? | ? |
-| Named Filters | Account | ? | ? |
-| LeftJoin | Student | ? | ? |
+| Vector Search | Product | + Required | - |
+| JSON Type (native) | Customer | + Required (level 170) | Uses `nvarchar(max)` fallback |
+| Complex Types | Customer | + | + |
+| ExecuteUpdate | Order | + | + |
+| Named Filters | Account | + | + |
+| LeftJoin | Student | + | + |
 
-## ?? What Makes This Project Different?
+## What Makes This Project Different
 
-### ? Feature Isolation
+### Feature Isolation
 Each EF Core 10 feature is demonstrated with its own dedicated model:
 - **Customer** = Complex Types (not mixed with JSON or vectors)
 - **Article** = JSON Type Support (pure document storage)
@@ -223,17 +223,17 @@ Each EF Core 10 feature is demonstrated with its own dedicated model:
 - **Product** = Vector Search (AI/semantic search only)
 - **Account** = Named Query Filters (multi-tenancy + soft delete)
 
-### ? Clear Purpose
+### Clear Purpose
 No confusion about which model demonstrates which feature. Each model is designed specifically for its feature demonstration.
 
-### ? Real-World Scenarios
+### Real-World Scenarios
 - Customer with addresses (e-commerce)
 - Article with metadata (content management)
 - Order processing (order management)
 - Product search (e-commerce/recommendations)
 - Account management (SaaS/multi-tenant)
 
-## ?? Official Documentation
+## Official Documentation
 
 - [EF Core 10 What's New](https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-10.0/whatsnew)
 - [Vector Search](https://learn.microsoft.com/en-us/ef/core/providers/sql-server/vector-search)
@@ -241,7 +241,7 @@ No confusion about which model demonstrates which feature. Each model is designe
 - [JSON Columns](https://learn.microsoft.com/en-us/ef/core/what-is-new/ef-core-8.0/whatsnew#json-columns)
 - [Named Query Filters](https://learn.microsoft.com/en-us/ef/core/querying/filters)
 
-## ?? License
+## License
 
 MIT License - Free to use for learning
 
