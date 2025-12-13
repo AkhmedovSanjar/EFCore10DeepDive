@@ -23,12 +23,12 @@ public class ComplexTypeStorageBenchmark
         await _context.Database.EnsureDeletedAsync();
         await _context.Database.EnsureCreatedAsync();
 
-        Console.WriteLine("Seeding database with 10,000 customers...");
+        Console.WriteLine("Seeding database with 100,000 customers...");
 
         var cities = new[] { "Seattle", "Redmond", "Bellevue", "Tacoma", "Spokane", "Portland", "San Francisco", "Los Angeles" };
         var customers = new List<Customer>();
 
-        for (int i = 1; i <= 10000; i++)
+        for (int i = 1; i <= 100000; i++)
         {
             var shippingCity = cities[i % cities.Length];
             var billingCity = cities[(i + 1) % cities.Length];
@@ -111,7 +111,7 @@ public class ComplexTypeStorageBenchmark
     {
         return await _context.Customers
             .Where(c => c.BillingAddress.City == SearchCity)
-            .Take(100)
+            .Take(1000)
             .ToListAsync();
     }
 
@@ -124,9 +124,10 @@ public class ComplexTypeStorageBenchmark
     {
         return await _context.Customers
             .Where(c => c.ShippingAddress.City == SearchCity)
-            .Take(100)
+            .Take(1000)
             .ToListAsync();
     }
+
 
     /// <summary>
     /// Query by AlternateAddress.City (One-to-one association - separate table)
@@ -137,7 +138,7 @@ public class ComplexTypeStorageBenchmark
     {
         return await _context.Customers.Include(c => c.AlternateAddress)
             .Where(c => c.AlternateAddress != null && c.AlternateAddress.City == SearchCity)
-            .Take(100)
+            .Take(1000)
             .ToListAsync();
     }
 }

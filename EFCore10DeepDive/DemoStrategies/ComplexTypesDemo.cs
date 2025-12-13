@@ -69,7 +69,7 @@ public class ComplexTypesDemo : DemoBase
                 PreferredLanguage = "en-US",
                 Currency = "USD",
                 ThemeMode = "Dark"
-            }
+            },
         };
 
         context.Customers.Add(customer);
