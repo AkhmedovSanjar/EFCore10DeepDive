@@ -53,7 +53,7 @@ public class AppDbContext : DbContext
             entity.ComplexProperty(c => c.ShippingAddress);
 
             // Stored as JSON text - More flexible, less storage, queryable
-            entity.ComplexProperty(c => c.BillingAddress, builder => builder.ToJson());
+            entity.ComplexProperty(c => c.BillingAddress, address => address.ToJson());
 
             // One-to-one association - Separate table with JOIN
             entity.HasOne(c => c.AlternateAddress)
